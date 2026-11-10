@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apex National Bank — Live Java Swing Demo</title>
+    <script src="https://cjrtnc.leaningtech.com/4.3/loader.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        header {
+            width: 100%;
+            background: #1e293b;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+            font-size: 14px;
+        }
+        .credentials {
+            color: #38bdf8;
+            font-weight: 600;
+        }
+        #app-container {
+            margin-top: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div><strong>Apex National Bank</strong> — Full-Stack Java Swing &amp; OOP System (Running Live in WebAssembly)</div>
+    <div class="credentials">Demo Login: ACC100101, ACC100102, or ACC100103 &nbsp;|&nbsp; PIN: 1234</div>
+</header>
+
+<div id="status" style="margin-top:16px;color:#94a3b8;font-size:14px;">Loading Java runtime…</div>
+<div id="app-container"></div>
+
+<script>
+    async function launchBankApp() {
+        const status = document.getElementById("status");
+        try {
+            await cheerpjInit({ version: 11 });
+            status.textContent = "Starting application…";
+            cheerpjCreateDisplay(1050, 690, document.getElementById("app-container"));
+
+            // Resolve the folder this page is served from, so it works on
+            // GitHub Pages (/RepoName/) and on localhost.
+            let basePath = window.location.pathname;
+            if (!basePath.endsWith("/")) {
+                basePath = basePath.substring(0, basePath.lastIndexOf("/") + 1);
+            }
+
+            // "/app/" is CheerpJ's mount point for the web server root.
+            await cheerpjRunJar("/app" + basePath + "ApexBankApp.jar");
+            status.remove();
+        } catch (err) {
+            console.error(err);
+            status.style.color = "#f87171";
+            status.textContent = "Failed to start: " + err;
+        }
+    }
+    launchBankApp();
+</script>
+</body>
+</html>
